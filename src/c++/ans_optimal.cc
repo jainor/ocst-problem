@@ -4,7 +4,7 @@
 
 const std::string Ans::kSeparator = ",";
 const int Ans::kPrecision = 4;
-const double Ans::kEps = 1e-6;
+const double Ans::kEps = 1e-9;
 const int knorm = 100;
 
 std::ostream &operator<<(std::ostream &out, const Ans &cur) {

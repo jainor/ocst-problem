@@ -24,7 +24,7 @@ struct Ans {
     this->relaxed = relaxed;
     this->lower_bound = lower_bound;
     this->upper_bound = upper_bound;
-    this->solved = (fabs(upper_bound - lower_bound) < kEps);
+    this->solved = (gap_answer <= kEps);
   }
 
   friend std::ostream &operator<<(std::ostream &out, const Ans &cur);
