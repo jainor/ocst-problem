@@ -40,7 +40,7 @@ class InstanceManager:
     #command = "./lib/compareoptimal_c++"
     #time = 3600
     time = 3600
-    heuristics = 0.05
+    heuristics = 0.00
 
     prefixInput =  "in"
     prefixOutput =  "out"

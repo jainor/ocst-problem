@@ -40,6 +40,7 @@ class Solver {
     model_.set(GRB_IntParam_Presolve, 0);
     model_.set(GRB_IntParam_PreCrush, 1);
     model_.set(GRB_IntParam_Threads, 1);
+    model_.set(GRB_IntParam_Cuts, 0);
   }
 };
 
