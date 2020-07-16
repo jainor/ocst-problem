@@ -20,8 +20,20 @@ class FormulationsManager:
     header = "formulation"
     formulations = ["pathbased", "flowbased", "flowbasedrelaxed","rootedbased"]
 
+
+class DataSets:
+    #Current instances for thesis experiments
+    dataSets = ["sparseRsmallW","sparseRlargeW","completeRsmallW","completeRlargeW"]  
+    probRValues = [0.3,0.3,1,1]
+    maxWValues = [1000,1000000,1000,1000000]
+
 class InstanceManager:
 
+    # these values can be overwritten to generate a new DataSet 
+    probR = 1
+    maxW = 1000
+   
+    #  for each DataSet
     gaps = [0.1,0.2,0.3,1]
     eps = 0.0001
     n = [20,40,50,60,70]
@@ -32,7 +44,6 @@ class InstanceManager:
     #n = [10,15]
     #p = [0.3,0.6]
     #instances = 4
-    maxW = 10000000
     formulations = FormulationsManager.formulations
     defaultFormulation = 0
 #change this
@@ -51,10 +62,17 @@ class InstanceManager:
 
     prefixn = "n"
     prefixp = "p"
-    Instance = None
 
-    def __init__(self,InstanceName):
-        self.Instance = InstanceManager.addPath(InstanceManager.defaultDirectory, InstanceName)
+    Instance = None
+    InstanceName = None 
+
+    def __init__(self, InstanceName = "default" ):
+        self.InstanceName = InstanceName
+        self.Instance = InstanceManager.addPath(InstanceManager.defaultDirectory, self.InstanceName)
+
+    @staticmethod
+    def totalInstances():
+        return InstanceManager.instances * len(InstanceManager.n) * len(InstanceManager.p)
 
     @staticmethod
     def addPath(x,y):

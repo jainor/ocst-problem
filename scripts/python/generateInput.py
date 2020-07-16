@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 
 from configOCST import InstanceManager as manager
+from configOCST import DataSets
 from configOCST import FramesConfig as frameManager 
 from configOCST import ResultFieldsOCST as OCSTFields
 from configOCST import FormulationsManager as OCSTFormulations
@@ -29,12 +30,23 @@ def createInput(Instance):
                 os.mkdir(instance.fullPathForm(ni,pi,formulation))
             for i in range(manager.instances):
                 #open(instance.fullPathInput(ni,pi,i), 'a').close()
-                graphGen.generateInputOCSTP(ni,pi,1000,instance.fullPathInput(ni,pi,i))
+                graphGen.generateInputOCSTP(ni,pi,instance.fullPathInput(ni,pi,i))
                 
                 #os.mkdir(fullPath(ni,pi,i))
+
+# create datasets defined in config.py
+def createDataSet():
+    for name, pR, pW in zip(DataSets.dataSets, DataSets.probRValues, DataSets.maxWValues) :
+        manager.probR = pR
+        manager.maxW = pW
+        createInput(name)
 
 if __name__ == "__main__":
 
     if len(sys.argv) == 2 :
         createInput(sys.argv[1])
-        sys.exit()
+
+    if len(sys.argv) == 1 :
+        createDataSet()
+
+    sys.exit()

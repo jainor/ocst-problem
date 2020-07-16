@@ -6,9 +6,10 @@ import time
 from Queue import Queue
 from threading import Thread
 from configOCST import InstanceManager as manager
+from configOCST import DataSets
 
 
-def downloadEnclosures(i, q):
+def parallelRun(i, q):
     #Worker thread function.
     #These daemon threads go into an infinite loop, and only exit when the main thread ends.
     while True:
@@ -35,7 +36,7 @@ def createOutput(Instance):
     queue_tasks = Queue()
 
     for i in range(num_fetch_threads):
-        worker = Thread(target=downloadEnclosures, args=(i, queue_tasks,))
+        worker = Thread(target=parallelRun, args=(i, queue_tasks,))
         worker.setDaemon(True)
         worker.start()
 
@@ -51,9 +52,18 @@ def createOutput(Instance):
     queue_tasks.join()
     print ("done")
 
+def createOutputDataSets():
+    for name in DataSets.dataSets:
+        print name
+        createOutput(name)
+
 
 if __name__ == "__main__":
 
     if len(sys.argv) == 2 :
         createOutput(sys.argv[1])
-        sys.exit()
+
+    if len(sys.argv) == 1 :
+        createOutputDataSets()
+
+    sys.exit()

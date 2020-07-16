@@ -26,7 +26,7 @@ set(generateFilePython "${scriptsDir}/generateInput.py")
 set(runInstancePython "${scriptsDir}/runOCST.py")
 set(readInstancePython "${scriptsDir}/readOutput.py")
 
-add_custom_target( generate-instance COMMAND python3  ${generateFilePython} ${InstanceOCSTP} )
-add_custom_target( run-instance COMMAND python  ${runInstancePython} ${InstanceOCSTP} )
-add_custom_target( read-instance COMMAND python3  ${readInstancePython} ${InstanceOCSTP} )
+add_custom_target(generate-instances COMMAND python3  ${generateFilePython})
+add_custom_target(run-instances COMMAND python  ${runInstancePython})
+add_custom_target(read-instances COMMAND python3  ${readInstancePython})
 

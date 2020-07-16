@@ -7,6 +7,7 @@ from configOCST import InstanceManager as manager
 from configOCST import FramesConfig as frameManager 
 from configOCST import ResultFieldsOCST as OCSTFields
 from configOCST import FormulationsManager as OCSTFormulations
+from configOCST import DataSets
 
 import os
 import glob
@@ -43,9 +44,9 @@ def joinOutput(Instance):
                       OCSTFields.solved:np.sum}
 
         frame = combined_csv.groupby([OCSTFields.vertices,OCSTFields.probability],as_index=False).agg(dictionary)
-        #   newFile = combined_csv.groupby(['vertices','prob'],as_index=False).agg({'time':['mean','std','max','min'],'lazyConstraints':'mean','cutsGenerated':'mean'})
         #print (newFile)
         frame.to_csv(  manager.addPath(instance.Instance, formulation + frameManager.outputSuffix + "." + frameManager.extension ), index=False, encoding=frameManager.encoding)
+        frame.to_latex(  manager.addPath(instance.Instance, formulation + frameManager.outputSuffix + ".tex" ), multirow = True, escape = False, index=False, encoding=frameManager.encoding)
         
     #common metrics for all cases
     allFrames = pd.concat(formulationFrames, axis=0, ignore_index=True)
@@ -65,8 +66,27 @@ def joinOutput(Instance):
     frame = allFrames.groupby([OCSTFormulations.header],as_index=False).agg(dictionaryAll)
     frame.to_csv(  manager.addPath(instance.Instance, frameManager.generalResult + "." + frameManager.extension ), index=False, encoding=frameManager.encoding)
 
+    return pd.concat(formulationFrames, axis=0, ignore_index=True)
+
+def joinOutputDataSets():
+    DataSetFrames = []
+    newLabel = 'DataSet'
+    csvFile = 'AllDataSets.csv'
+    for nameInstance in DataSets.dataSets:
+        dataSetFrame = joinOutput(nameInstance)
+        dataSetFrame[newLabel] = nameInstance
+        DataSetFrames.append(dataSetFrame)
+    allFrames = pd.concat(DataSetFrames, axis=0, ignore_index=True)
+    for nameInstance in DataSets.dataSets:
+        allFrames[nameInstance] =  allFrames[ [newLabel, OCSTFields.solved] ].apply(lambda x: 1 if x[0] == nameInstance and x[1] == 1 else 0, axis=1)
+    allFrames.to_csv( csvFile, index=False, encoding=frameManager.encoding)
+
 if __name__ == "__main__":
 
-    if len(sys.argv) == 2 :
+    if len(sys.argv) == 1:
+        joinOutputDataSets()
+
+    if len(sys.argv) == 2:
         joinOutput(sys.argv[1])
-        sys.exit()
+    
+    sys.exit()

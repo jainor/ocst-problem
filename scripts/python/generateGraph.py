@@ -4,24 +4,26 @@ import sys
 import subprocess
 import random
 
-def generateWeightedGraph(n,p,maxW):
+from configOCST import InstanceManager as manager 
+
+def generateWeightedGraph(n,p):
     G = nx.erdos_renyi_graph(n,p)
     for (u, v) in G.edges():
-        G.edges[u,v]['weight'] = random.randint(0,maxW)
+        G.edges[u,v]['weight'] = random.randint(0,manager.maxW)
     return G
 
-def generateInputOCSTP(n,p,maxW,fileName):
+def generateInputOCSTP(n,p,fileName):
     print(fileName)
     outputFile = open(fileName, 'w') 
     while True:
-        G = generateWeightedGraph(n,p,maxW)
+        G = generateWeightedGraph(n,p)
         if nx.is_connected(G):
             break
     print (G.number_of_nodes(), G.size(), p,file=outputFile)
     for (u, v, d) in G.edges(data=True):
         print (u,v,d['weight'],file=outputFile)
     # R is the graph induced by requirements pairs
-    R = generateWeightedGraph(n,0.3,maxW)
+    R = generateWeightedGraph(n,manager.probR)
     print (R.size(),file=outputFile)
     for (u, v, d) in R.edges(data=True):
         print (u,v,d['weight'],file=outputFile)
@@ -29,13 +31,5 @@ def generateInputOCSTP(n,p,maxW,fileName):
 
 
 if __name__ == "__main__":
-
-    #f=open("bad", "r")
-    #w=open("sonrisa","w")
-    #proc = subprocess.Popen("./pathbased_c++", stdin=f, stdout=w)
-    #ret_code = proc.wait()
-    #w.flush()
-    #f.close()
-    #w.close()
-    main()
-
+    sys.exit()
+    
